@@ -3,6 +3,7 @@ name: Update version and publish package to PyPi
 on:
   push:
     branches:
+      - master
       - main
 
 jobs:
