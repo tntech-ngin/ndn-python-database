@@ -15,6 +15,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Set up Git identity
+        run: |
+          git config --global user.email "gportdev@gmail.com"
+          git config --global user.name "Gabriel Porteiro"
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
