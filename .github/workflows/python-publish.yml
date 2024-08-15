@@ -23,7 +23,7 @@ jobs:
       - name: Determine version bump
         id: version
         run: |
-          bump_message="version to"
+          bump_message="Bump version to"
           
           # Get the commit messages for the last 10 commits
           commit_messages=$(git log -n 10 --pretty=format:%B)
