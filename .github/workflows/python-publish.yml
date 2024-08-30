@@ -70,7 +70,7 @@ jobs:
           else
             git add docs/version.py
             git commit -m "Bump version to $version"
-            git push origin master
+            git push origin refs/heads/master
           fi
   build:
     name: Build distribution 📦
