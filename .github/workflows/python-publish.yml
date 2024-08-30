@@ -20,10 +20,10 @@ jobs:
           git config --global user.email "gportdev@gmail.com"
           git config --global user.name "Gabriel Porteiro"
 
-      - name: Set up Python
+      - name: Set up Python 3.10
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.10"
 
       - name: Determine version bump
         id: version
@@ -40,8 +40,7 @@ jobs:
           
           if [[ $new_version ]]; then
             echo "Version bump detected: $new_version"
-            echo "::set-output name=version::$new_version"
-            echo "version=$new_version" >> $GITHUB_ENV
+            echo "NEW_PKG_VERSION=$new_version" >> $GITHUB_ENV
           else
             echo "No version bump found in the commit messages."
             exit 0
@@ -85,10 +84,10 @@ jobs:
           git config --global --add safe.directory $GITHUB_WORKSPACE
           git pull origin refs/heads/master
 
-      - name: Set up Python
+      - name: Set up Python 3.10
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.10"
 
       - name: Install pypa/build
         run: python3 -m pip install build --user
@@ -121,7 +120,7 @@ jobs:
 
   github-release:
     name: Sign package with Sigstore and upload them to GitHub Release
-    needs: publish-to-pypi
+    needs: [update-version, publish-to-pypi]
     runs-on: ubuntu-latest
     permissions:
       contents: write  # IMPORTANT: mandatory for making GitHub Releases
@@ -142,8 +141,8 @@ jobs:
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          version: ${{ env.version }}
         run: |
+          version=${{ needs.update-version.outputs.NEW_PKG_VERSION }}
           echo "Creating release for version: $version"
           if [ -z "$version" ]; then
             echo "Error: version is not set."
