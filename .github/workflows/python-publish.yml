@@ -120,7 +120,7 @@ jobs:
 
   github-release:
     name: Sign package with Sigstore and upload them to GitHub Release
-    needs: [update-version, publish-to-pypi]
+    needs: update-version
     runs-on: ubuntu-latest
     permissions:
       contents: write  # IMPORTANT: mandatory for making GitHub Releases
