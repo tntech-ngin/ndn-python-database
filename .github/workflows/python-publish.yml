@@ -142,7 +142,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          version=${{ needs.update-version.outputs.NEW_PKG_VERSION }}
+          version=${{ needs.version.outputs.NEW_PKG_VERSION }}
           echo "Creating release for version: $version"
           if [ -z "$version" ]; then
             echo "Error: version is not set."
