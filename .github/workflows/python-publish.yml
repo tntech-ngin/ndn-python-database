@@ -82,7 +82,7 @@ jobs:
       - name: Fetch latest changes
         run: |
           git config --global --add safe.directory $GITHUB_WORKSPACE
-          git pull origin main  # Ensure you have the latest commit, including the version bump
+          git pull origin refs/heads/master
 
       - name: Set up Python
         uses: actions/setup-python@v5
