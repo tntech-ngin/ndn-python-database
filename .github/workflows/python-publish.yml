@@ -41,6 +41,7 @@ jobs:
           if [[ $new_version ]]; then
             echo "Version bump detected: $new_version"
             echo "::set-output name=version::$new_version"
+            echo "version=$new_version" >> $GITHUB_ENV
           else
             echo "No version bump found in the commit messages."
             exit 0
@@ -141,8 +142,13 @@ jobs:
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          version: ${{ env.version }}
         run: |
-          version="${{ needs.update-version.outputs.version }}"
+          echo "Creating release for version: $version"
+          if [ -z "$version" ]; then
+            echo "Error: version is not set."
+            exit 1
+          fi
           gh release create "$version" --repo "${{ github.repository }}" --notes "Release version $version"
 
       - name: Upload artifact signatures to GitHub Release
