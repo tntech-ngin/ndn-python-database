@@ -40,7 +40,7 @@ jobs:
           
           if [[ $new_version ]]; then
             echo "Version bump detected: $new_version"
-            echo "NEW_PKG_VERSION=$new_version" >> $GITHUB_ENV
+            echo "NEW_PKG_VERSION=$new_version" >> $GITHUB_OUTPUT
           else
             echo "No version bump found in the commit messages."
             exit 0
@@ -48,7 +48,7 @@ jobs:
 
       - name: Bump version
         run: |
-          version="${{ steps.version.outputs.version }}"
+          version="${{ steps.version.outputs.NEW_PKG_VERSION }}"
           echo "Detected version: $version"
           
           if [ -z "$version" ]; then
