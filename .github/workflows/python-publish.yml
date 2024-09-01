@@ -10,6 +10,8 @@ jobs:
   update-version:
     name: Update Version
     runs-on: ubuntu-latest
+    outputs:
+      new_pkg_version: ${{ steps.version.outputs.pkg_version }}
 
     steps:
       - name: Check out repository
@@ -40,7 +42,7 @@ jobs:
           
           if [[ $new_version ]]; then
             echo "Version bump detected: $new_version"
-            echo "NEW_PKG_VERSION=$new_version" >> $GITHUB_OUTPUT
+            echo "pkg_version=$new_version" >> $GITHUB_OUTPUT
           else
             echo "No version bump found in the commit messages."
             exit 0
@@ -48,7 +50,7 @@ jobs:
 
       - name: Bump version
         run: |
-          version="${{ steps.version.outputs.NEW_PKG_VERSION }}"
+          version="${{ steps.version.outputs.pkg_version }}"
           echo "Detected version: $version"
           
           if [ -z "$version" ]; then
@@ -141,8 +143,8 @@ jobs:
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          version: ${{needs.update-version.outputs.pkg_version}}
         run: |
-          version=${{ needs.version.outputs.NEW_PKG_VERSION }}
           echo "Creating release for version: $version"
           if [ -z "$version" ]; then
             echo "Error: version is not set."
