@@ -9,6 +9,7 @@ on:
 jobs:
   update-version:
     name: Update Version
+    if: "contains(github.event.github.event.push.commits[][message], 'Bump version')"
     runs-on: ubuntu-latest
     outputs:
       new_pkg_version: ${{ steps.version.outputs.pkg_version }}
@@ -19,8 +20,8 @@ jobs:
 
       - name: Set up Git identity
         run: |
-          git config --global user.email "gportdev@gmail.com"
-          git config --global user.name "Gabriel Porteiro"
+          git config --global user.email "${{github.event.push.commits[][author][email]}}"
+          git config --global user.name "${{github.event.push.commits[][author][name]}}"
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v5
